@@ -7,7 +7,38 @@ namespace IDCH.Core.Models
     internal class Entities
     {
     }
+    #region token
+    public class ListTokenObj
+    {
+        public int billing_account_id { get; set; }
+        public string consumer_id { get; set; }
+        public string created_at { get; set; }
+        public string description { get; set; }
+        public int id { get; set; }
+        public string kong_id { get; set; }
+        public bool restricted { get; set; }
+        public string token { get; set; }
+        public string updated_at { get; set; }
+        public int user_id { get; set; }
+    }
+    #endregion
+
     #region auth
+
+    public class ModifyProfileResult
+    {
+        public string avatar { get; set; }
+        public string created_at { get; set; }
+        public string email { get; set; }
+        public string first_name { get; set; }
+        public int id { get; set; }
+        public string last_name { get; set; }
+        public string personal_id_number { get; set; }
+        public string phone_number { get; set; }
+        public string updated_at { get; set; }
+        public int user_id { get; set; }
+    }
+
     public class UserInfoObj
     {
         public string cookie_id { get; set; }

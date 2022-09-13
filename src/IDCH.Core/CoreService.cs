@@ -123,5 +123,83 @@ namespace IDCH.Core
             }
 
         }
+
+        public async Task<T> CallServiceAndSerialize<T>(string ApiMethod, ApiParam Parameter, FormUrlEncodedContent form) where T : class
+        {
+            try
+            {
+
+                var request = string.Empty;
+                if (Parameter == null)
+                {
+                    request = $"{Prefix}/{ApiMethod}";
+                }
+                else
+                {
+                    request = $"{Prefix}/{ApiMethod}{Parameter.CreateQueryString()}";
+                }
+               
+                var response = await client.PostAsync(request,form);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<T>(content);
+                }
+                else
+                    return default(T);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return default(T);
+
+            }
+
+        }
+
+        public async Task<T> PatchServiceAndSerialize<T>(string ApiMethod, ApiParam Parameter, StringContent form) where T : class
+        {
+            try
+            {
+
+                var request = string.Empty;
+                if (Parameter == null)
+                {
+                    request = $"{Prefix}/{ApiMethod}";
+                }
+                else
+                {
+                    request = $"{Prefix}/{ApiMethod}{Parameter.CreateQueryString()}";
+                }
+
+                var method = "PATCH";
+                var httpVerb = new HttpMethod(method);
+                var httpRequestMessage =
+                    new HttpRequestMessage(httpVerb, request)
+                    {
+                        Content = form
+                    };
+
+                var response = await client.SendAsync(httpRequestMessage);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<T>(content);
+                }
+                else
+                    return default(T);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return default(T);
+
+            }
+
+        }
     }
 }

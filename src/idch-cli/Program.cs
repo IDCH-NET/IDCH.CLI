@@ -3,6 +3,7 @@ using IDCH.Core;
 using Spectre.Console;
 using System.Drawing;
 using System.Text;
+using System.Text.Json;
 using Color = System.Drawing.Color;
 using Console = Colorful.Console;
 
@@ -42,6 +43,13 @@ class Program
                 case "cls":
                 case "clear":
                     Console.Clear();
+                    break;
+
+                case "auth-modify":
+                     await ModifyProfile();
+                    break;
+                case "token-list":
+                     await ListToken();
                     break;
                 case "vm-list":
                      await ListVM();
@@ -271,6 +279,69 @@ class Program
 
 
     }
+
+    static async Task ListToken()
+    {
+        try
+        {
+            Console.WriteLine("");
+            AnsiConsole.WriteLine("List Token:");
+            var tokens = await _api.Token.GetListToken();
+            // Create a table
+            var table = new Table();
+
+            // Add some columns
+            table.AddColumn(new TableColumn("billingid").Centered());
+            table.AddColumn(new TableColumn("consumerid").Centered());
+            table.AddColumn(new TableColumn("created").Centered());
+            table.AddColumn(new TableColumn("desc").Centered());
+            table.AddColumn(new TableColumn("id").Centered());
+            table.AddColumn(new TableColumn("kongid").Centered());
+            table.AddColumn(new TableColumn("restricted").Centered());
+            table.AddColumn(new TableColumn("token").Centered());
+            table.AddColumn(new TableColumn("updated").Centered());
+
+            foreach (var item in tokens)
+            {
+                table.AddRow(item.billing_account_id.ToString(),item.consumer_id,item.created_at,item.description,item.id.ToString(),item.kong_id,item.restricted.ToString(),item.token,item.updated_at??"-");
+            }
+
+
+            // Render the table to the console
+            AnsiConsole.Write(table);
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.WriteLine($"Error: {ex.ToString()}");
+
+        }
+
+
+    }
+
+    static async Task ModifyProfile()
+    {
+        try
+        {
+            Console.WriteLine("");
+            AnsiConsole.WriteLine("Modify User Profile:");
+            var firstname = AnsiConsole.Ask<string>("What's your [green]first name[/]?");
+            var lastname = AnsiConsole.Ask<string>("What's your [green]last name[/]?");
+            var phonenumber = AnsiConsole.Ask<string>("What's your [green]phone number[/]?");
+            var personalid = AnsiConsole.Ask<string>("What's your [green]personal id[/]?");
+            var res = await _api.Auth.ModifyUserProfile(firstname,lastname,phonenumber,personalid);
+            if(res!=null)
+            // Render the table to the console
+            AnsiConsole.WriteLine($"updated >> name: {res.first_name} {res.last_name}, ava: {res.avatar}, mail:{res.email}, id: {res.personal_id_number}, phone: {res.phone_number}");
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.WriteLine($"Error: {ex.ToString()}");
+
+        }
+
+
+    }
     static void Menu()
     {
         Console.WriteLine("");
@@ -291,6 +362,8 @@ class Program
         table.AddRow("3", "global", "[green]q[/]", "Quit");
         table.AddRow("4", "VM", "[green]vm-list[/]", "List of VMs");
         table.AddRow("5", "Managed Service", "[green]ms-list[/]", "List of Managed Service Package");
+        table.AddRow("6", "Auth", "[green]auth-modify[/]", "Modify user profile");
+        table.AddRow("7", "Token", "[green]token-list[/]", "List token");
 
         // Render the table to the console
         AnsiConsole.Write(table);
