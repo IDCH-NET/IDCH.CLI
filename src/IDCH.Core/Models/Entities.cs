@@ -7,6 +7,18 @@ namespace IDCH.Core.Models
     internal class Entities
     {
     }
+    #region locations
+    public class LocationObj
+    {
+        public string display_name { get; set; }
+        public bool is_default { get; set; }
+        public bool is_preferred { get; set; }
+        public string description { get; set; }
+        public int order_nr { get; set; }
+        public string slug { get; set; }
+        public string country_code { get; set; }
+    }
+    #endregion
     #region token
     public class ListTokenObj
     {

@@ -10,6 +10,7 @@ namespace IDCH.Core
         public AuthService Auth { get; set; }
         public VMService VM { get; set; }
         public TokenService Token { get; set; }
+        public LocationService Locations { get; set; }
 
         public ManagedService ManagedServices { get; set; }
         CoreService core;
@@ -20,6 +21,7 @@ namespace IDCH.Core
             VM = new VMService(core);
             ManagedServices = new ManagedService(core);
             Token = new TokenService(core);
+            Locations = new LocationService(core);
         }
 
         

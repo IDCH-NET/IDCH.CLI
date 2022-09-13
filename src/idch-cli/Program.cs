@@ -51,6 +51,9 @@ class Program
                 case "token-list":
                      await ListToken();
                     break;
+                case "location-list":
+                     await ListLocations();
+                    break;
                 case "vm-list":
                      await ListVM();
                     break;
@@ -279,7 +282,42 @@ class Program
 
 
     }
+    static async Task ListLocations()
+    {
+        try
+        {
+            Console.WriteLine("");
+            AnsiConsole.WriteLine("List Location:");
+            var tokens = await _api.Locations.GetLocations();
+            // Create a table
+            var table = new Table();
 
+            // Add some columns
+            table.AddColumn(new TableColumn("display_name").Centered());
+            table.AddColumn(new TableColumn("is_default").Centered());
+            table.AddColumn(new TableColumn("is_preferred").Centered());
+            table.AddColumn(new TableColumn("description").Centered());
+            table.AddColumn(new TableColumn("order_nr").Centered());
+            table.AddColumn(new TableColumn("slug").Centered());
+            table.AddColumn(new TableColumn("country_code").Centered());
+
+            foreach (var item in tokens)
+            {
+                table.AddRow(item.display_name, item.is_default.ToString(), item.is_preferred.ToString(), item.description, item.order_nr.ToString(),item.slug,item.country_code );
+            }
+
+
+            // Render the table to the console
+            AnsiConsole.Write(table);
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.WriteLine($"Error: {ex.ToString()}");
+
+        }
+
+
+    }
     static async Task ListToken()
     {
         try
@@ -364,6 +402,7 @@ class Program
         table.AddRow("5", "Managed Service", "[green]ms-list[/]", "List of Managed Service Package");
         table.AddRow("6", "Auth", "[green]auth-modify[/]", "Modify user profile");
         table.AddRow("7", "Token", "[green]token-list[/]", "List token");
+        table.AddRow("8", "Locations", "[green]location-list[/]", "List DC location");
 
         // Render the table to the console
         AnsiConsole.Write(table);
