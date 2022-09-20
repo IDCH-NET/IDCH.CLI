@@ -210,14 +210,17 @@ class Program
     {
         try
         {
+            var slug = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+           .Title("Where is your vm location ?")
+           .AddChoices(new string[] { "jkt01","jkt02","sgp01" }));
             Console.WriteLine("");
             AnsiConsole.WriteLine("List VM:");
-            var vms = await _api.VM.GetVMList();
+            var vms = await _api.VM.GetVMList(slug);
             // Create a table
             var table = new Table();
 
             // Add some columns
-            table.AddColumn("id");
             table.AddColumn(new TableColumn("uuid").Centered());
             table.AddColumn(new TableColumn("hostname").Centered());
             table.AddColumn(new TableColumn("status").Centered());
@@ -225,11 +228,11 @@ class Program
             table.AddColumn(new TableColumn("storage").Centered());
             table.AddColumn(new TableColumn("os").Centered());
 
-            foreach (var vm in vms.Property1)
+            foreach (var vm in vms)
             {
                 var storageStr = string.Empty;
-                vm.storage.ToList().ForEach(x => storageStr += $"{x.id}. size:{x.size.ToString("n0")}, name:{x.name}|");
-                table.AddRow(vm.id.ToString(), vm.uuid, vm.hostname, vm.status, vm.memory.ToString("n0"), storageStr, $"{vm.os_name} {vm.os_version}");
+                vm.storage.ToList().ForEach(x => storageStr += $"uuid:{x.uuid}, size:{x.size.ToString("n0")}, name:{x.name}|");
+                table.AddRow(vm.uuid, vm.hostname, vm.status, vm.memory.ToString("n0"), storageStr, $"{vm.os_name} {vm.os_version}");
             }
 
 

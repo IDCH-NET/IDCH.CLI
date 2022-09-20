@@ -9,15 +9,16 @@ namespace IDCH.Core
 {
     public class VMService
     {
-        public static string GET_VM_LIST = "user-resource/vm/list";
+        public static string GET_VM_LIST = "[slug]/user-resource/vm/list";
         CoreService core;
         public VMService(CoreService core)
         {
             this.core = core;
         }
-        public async Task<VMListObject> GetVMList()
+        public async Task<VMListObject[]> GetVMList(string slug)
         {
-            return await core.CallServiceAndSerialize<VMListObject>(GET_VM_LIST, null);
+            var POSTFIX = GET_VM_LIST.Replace("[slug]", slug);
+            return await core.CallServiceAndSerialize<VMListObject[]>(POSTFIX, null);
         }
 
 

@@ -86,17 +86,11 @@ namespace IDCH.Core.Models
 
     public class VMListObject
     {
-        public DataVM[] Property1 { get; set; }
-    }
-
-    public class DataVM
-    {
         public bool backup { get; set; }
         public int billing_account { get; set; }
         public string created_at { get; set; }
         public string description { get; set; }
         public string hostname { get; set; }
-        public int id { get; set; }
         public string mac { get; set; }
         public int memory { get; set; }
         public string name { get; set; }
@@ -104,8 +98,7 @@ namespace IDCH.Core.Models
         public string os_version { get; set; }
         public string private_ipv4 { get; set; }
         public string status { get; set; }
-        public Storage[] storage { get; set; }
-        public object tags { get; set; }
+        public List<Storage> storage { get; set; }
         public string updated_at { get; set; }
         public int user_id { get; set; }
         public string username { get; set; }
@@ -116,17 +109,16 @@ namespace IDCH.Core.Models
     public class Storage
     {
         public string created_at { get; set; }
-        public int id { get; set; }
         public string name { get; set; }
         public string pool { get; set; }
         public bool primary { get; set; }
-        public object[] replica { get; set; }
+        public List<object> replica { get; set; }
         public bool shared { get; set; }
         public int size { get; set; }
         public string type { get; set; }
-        public object updated_at { get; set; }
         public int user_id { get; set; }
         public string uuid { get; set; }
+        public string updated_at { get; set; }
     }
 
     #endregion
